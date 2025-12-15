@@ -13,3 +13,5 @@ export const supabase = createClient(
   supabaseUrl || 'https://setup-needed.supabase.co',
   supabaseAnonKey || 'setup-needed'
 );
+
+export const isSupabaseConfigured = !!supabaseUrl && !!supabaseAnonKey;

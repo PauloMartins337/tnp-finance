@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { DollarSign, Lock, User, UserPlus } from 'lucide-react';
 import { AuthService } from '../services/authService';
+import { isSupabaseConfigured } from '../services/supabase';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -55,6 +56,14 @@ const Register: React.FC = () => {
         </div>
 
         <div className="p-8">
+          {!isSupabaseConfigured && (
+            <div className="bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 mb-6 text-sm">
+              <p className="font-bold">⚠️ Configuração Necessária</p>
+              <p>O site não encontrou as chaves do Supabase.</p>
+              <p className="mt-1">Vá no painel da Vercel {'>'} Settings {'>'} Environment Variables e adicione as chaves do arquivo .env.</p>
+            </div>
+          )}
+
           <form onSubmit={handleRegister} className="space-y-6">
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center border border-red-100">
