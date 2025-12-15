@@ -90,7 +90,8 @@ const Login: React.FC = () => {
           </div>
 
           <div className="mt-6 text-center text-xs text-gray-400">
-            &copy; 2025 TNP CONTROL. Todos os direitos reservados.
+            <p>&copy; 2025 TNP CONTROL. Todos os direitos reservados.</p>
+            <p className="mt-1 font-medium">Criado por Paulo Martins</p>
           </div>
         </div>
       </div>
