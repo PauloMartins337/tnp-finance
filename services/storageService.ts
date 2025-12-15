@@ -2,8 +2,31 @@ import { Receipt, Deduction, ReceiptStatus, ReceiptWithCalculations } from '../t
 import { supabase } from './supabase';
 import { AuthService } from './authService';
 
+const isTestMode = () => localStorage.getItem('test_session') === 'true';
+
+const getTestReceipts = (): any[] => JSON.parse(localStorage.getItem('test_receipts') || '[]');
+const saveTestReceipts = (receipts: any[]) => localStorage.setItem('test_receipts', JSON.stringify(receipts));
+
+const getTestDeductions = (): any[] => JSON.parse(localStorage.getItem('test_deductions') || '[]');
+const saveTestDeductions = (deductions: any[]) => localStorage.setItem('test_deductions', JSON.stringify(deductions));
+
 export const StorageService = {
   getReceipts: async (): Promise<Receipt[]> => {
+    if (isTestMode()) {
+      const data = getTestReceipts();
+      return data.map((r: any) => ({
+        id: r.id,
+        receiptNumber: r.receipt_number,
+        date: r.date,
+        client: r.client,
+        totalValue: r.total_value,
+        description: r.description,
+        status: r.status as ReceiptStatus,
+        createdAt: r.created_at,
+        updatedAt: r.updated_at
+      })).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
     const { data, error } = await supabase
       .from('receipts')
       .select('*')
@@ -26,6 +49,21 @@ export const StorageService = {
   },
 
   getDeductions: async (receiptId?: string): Promise<Deduction[]> => {
+    if (isTestMode()) {
+      let data = getTestDeductions();
+      if (receiptId) {
+        data = data.filter((d: any) => d.receipt_id === receiptId);
+      }
+      return data.map((d: any) => ({
+        id: d.id,
+        receiptId: d.receipt_id,
+        date: d.date,
+        value: d.value,
+        description: d.description,
+        createdAt: d.created_at
+      }));
+    }
+
     let query = supabase.from('deductions').select('*');
     
     if (receiptId) {
@@ -48,6 +86,41 @@ export const StorageService = {
   saveReceipt: async (receipt: Omit<Receipt, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Promise<Receipt> => {
     const userId = await AuthService.getCurrentUserId();
     if (!userId) throw new Error('Usuário não autenticado');
+
+    if (isTestMode()) {
+      const receipts = getTestReceipts();
+      if (receipts.some((r: any) => r.receipt_number === receipt.receiptNumber)) {
+        throw new Error(`Recibo com número ${receipt.receiptNumber} já existe.`);
+      }
+
+      const newReceipt = {
+        id: crypto.randomUUID(),
+        receipt_number: receipt.receiptNumber,
+        date: receipt.date,
+        client: receipt.client,
+        total_value: receipt.totalValue,
+        description: receipt.description,
+        status: ReceiptStatus.OPEN,
+        user_id: userId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      receipts.push(newReceipt);
+      saveTestReceipts(receipts);
+
+      return {
+        id: newReceipt.id,
+        receiptNumber: newReceipt.receipt_number,
+        date: newReceipt.date,
+        client: newReceipt.client,
+        totalValue: newReceipt.total_value,
+        description: newReceipt.description,
+        status: newReceipt.status as ReceiptStatus,
+        createdAt: newReceipt.created_at,
+        updatedAt: newReceipt.updated_at
+      };
+    }
 
     // Check uniqueness
     const { data: existing } = await supabase
@@ -90,6 +163,52 @@ export const StorageService = {
   },
 
   addDeduction: async (deduction: Omit<Deduction, 'id' | 'createdAt'>): Promise<Deduction> => {
+    if (isTestMode()) {
+      const receipts = getTestReceipts();
+      const receiptIndex = receipts.findIndex((r: any) => r.id === deduction.receiptId);
+      if (receiptIndex === -1) throw new Error('Recibo não encontrado');
+      
+      const receipt = receipts[receiptIndex];
+      
+      const currentDeductions = getTestDeductions().filter((d: any) => d.receipt_id === receipt.id);
+      const totalDeducted = currentDeductions.reduce((acc: number, curr: any) => acc + curr.value, 0);
+      const balance = receipt.total_value - totalDeducted;
+
+      if (deduction.value > balance) {
+         throw new Error(`Valor do abatimento (R$ ${deduction.value}) excede o saldo restante (R$ ${balance}).`);
+      }
+
+      const newDeduction = {
+        id: crypto.randomUUID(),
+        receipt_id: deduction.receiptId,
+        date: deduction.date,
+        value: deduction.value,
+        description: deduction.description,
+        created_at: new Date().toISOString()
+      };
+
+      const allDeductions = getTestDeductions();
+      allDeductions.push(newDeduction);
+      saveTestDeductions(allDeductions);
+
+      const newTotalDeducted = totalDeducted + deduction.value;
+      if (Math.abs(receipt.total_value - newTotalDeducted) < 0.01) {
+        receipt.status = ReceiptStatus.PAID;
+        receipt.updated_at = new Date().toISOString();
+        receipts[receiptIndex] = receipt;
+        saveTestReceipts(receipts);
+      }
+
+      return {
+        id: newDeduction.id,
+        receiptId: newDeduction.receipt_id,
+        date: newDeduction.date,
+        value: newDeduction.value,
+        description: newDeduction.description,
+        createdAt: newDeduction.created_at
+      };
+    }
+
     // Get receipt to check balance
     const { data: receipt, error: rError } = await supabase
       .from('receipts')
@@ -161,6 +280,17 @@ export const StorageService = {
   },
 
   cancelReceipt: async (id: string) => {
+    if (isTestMode()) {
+      const receipts = getTestReceipts();
+      const index = receipts.findIndex((r: any) => r.id === id);
+      if (index !== -1) {
+        receipts[index].status = ReceiptStatus.CANCELLED;
+        receipts[index].updated_at = new Date().toISOString();
+        saveTestReceipts(receipts);
+      }
+      return;
+    }
+
     await supabase
       .from('receipts')
       .update({ status: ReceiptStatus.CANCELLED, updated_at: new Date().toISOString() })
