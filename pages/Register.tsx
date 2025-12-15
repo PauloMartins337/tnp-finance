@@ -52,7 +52,7 @@ const Register: React.FC = () => {
             <UserPlus size={40} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-wide">Criar Conta</h1>
-          <p className="text-slate-400 mt-2">Junte-se ao TNP FINANCE</p>
+          <p className="text-slate-400 mt-2">Junte-se ao TNP CONTROL</p>
         </div>
 
         <div className="p-8">

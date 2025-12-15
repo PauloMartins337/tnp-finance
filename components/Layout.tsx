@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-center gap-2">
             <LayoutDashboard className="text-emerald-400" size={28} />
-            <h1 className="text-xl font-bold tracking-wide">TNP <span className="text-emerald-400">FINANCE</span></h1>
+            <h1 className="text-xl font-bold tracking-wide">TNP <span className="text-emerald-400">CONTROL</span></h1>
           </div>
         </div>
         

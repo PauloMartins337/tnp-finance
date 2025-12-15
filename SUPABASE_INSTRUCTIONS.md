@@ -1,4 +1,4 @@
-# Configuração do Supabase para TNP FINANCE
+# Configuração do Supabase para TNP CONTROL
 
 O aplicativo foi migrado para usar o Supabase como backend (Banco de Dados e Autenticação). Siga os passos abaixo para configurar:
 

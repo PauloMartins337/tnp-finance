@@ -32,7 +32,7 @@ const Login: React.FC = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500 rounded-full mb-4 shadow-lg">
             <DollarSign size={48} className="text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-wide">TNP <span className="text-emerald-400">FINANCE</span></h1>
+          <h1 className="text-2xl font-bold text-white tracking-wide">TNP <span className="text-emerald-400">CONTROL</span></h1>
           <p className="text-slate-400 mt-2">Controle Financeiro</p>
         </div>
 
@@ -90,7 +90,7 @@ const Login: React.FC = () => {
           </div>
 
           <div className="mt-6 text-center text-xs text-gray-400">
-            &copy; 2025 TNP FINANCE. Todos os direitos reservados.
+            &copy; 2025 TNP CONTROL. Todos os direitos reservados.
           </div>
         </div>
       </div>
