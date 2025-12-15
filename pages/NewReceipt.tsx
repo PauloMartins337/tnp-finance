@@ -62,7 +62,7 @@ const NewReceipt: React.FC = () => {
 
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
         <div className="bg-slate-900 p-6">
-          <h2 className="text-xl text-white font-bold">Novo Recibo</h2>
+          <h2 className="text-xl text-white font-bold">Novo Protocolo</h2>
           <p className="text-slate-400 text-sm mt-1">Preencha os dados abaixo para cadastrar um novo título.</p>
         </div>
 

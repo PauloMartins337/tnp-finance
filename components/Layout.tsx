@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const navItems = [
     { to: '/', label: 'Dashboard', icon: PieChart },
-    { to: '/new', label: 'Novo Recibo', icon: PlusCircle },
+    { to: '/new', label: 'Novo Protocolo', icon: PlusCircle },
     { to: '/list', label: 'Listar Recibos', icon: List },
     { to: '/chat', label: 'Chat Interno', icon: MessageSquare },
   ];
