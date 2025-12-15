@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
     <div className="space-y-8">
       <div>
         <h2 className="text-3xl font-bold text-gray-800">Visão Geral</h2>
-        <p className="text-gray-500 mt-1">Acompanhe os indicadores financeiros dos seus recibos.</p>
+        <p className="text-gray-500 mt-1">Acompanhe os indicadores financeiros dos seus protocolos.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
