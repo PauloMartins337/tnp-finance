@@ -13,8 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navItems = [
     { to: '/', label: 'Dashboard', icon: PieChart },
     { to: '/new', label: 'Novo Protocolo', icon: PlusCircle },
-    { to: '/list', label: 'Listar Recibos', icon: List },
-    { to: '/chat', label: 'Chat Interno', icon: MessageSquare },
+    { to: '/list', label: 'Listar Protocolos', icon: List },
   ];
 
   const handleLogout = async () => {

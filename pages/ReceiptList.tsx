@@ -76,7 +76,7 @@ const ReceiptList: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Gerenciar Recibos</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Gerenciar Protocolos</h2>
           <p className="text-gray-500 text-sm">Visualize e gerencie seus lançamentos financeiros.</p>
         </div>
         <button 

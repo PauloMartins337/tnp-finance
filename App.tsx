@@ -7,7 +7,6 @@ import ReceiptList from './pages/ReceiptList';
 import ReceiptDetail from './pages/ReceiptDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Chat from './pages/Chat';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -25,7 +24,6 @@ const App: React.FC = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/new" element={<NewReceipt />} />
                   <Route path="/list" element={<ReceiptList />} />
-                  <Route path="/chat" element={<Chat />} />
                   <Route path="/receipt/:id" element={<ReceiptDetail />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
